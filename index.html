@@ -11,12 +11,29 @@
     td.habit-name { text-align: left; cursor: default; }
     td.week-cell { cursor: pointer; }
     td.done { background-color: #8fbc8f; } /* green for done */
+    button.delete-btn {
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    #exportBtn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>Habit Tracker (13 Weeks)</h1>
   <input id="habitInput" placeholder="New habit" />
   <button onclick="addHabit()">Add</button>
+  <button id="exportBtn" onclick="exportData()">Export Data</button>
 
   <table id="habitTable">
     <thead>
@@ -25,6 +42,8 @@
         <!-- Generate week headers -->
         <th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th><th>Day 6</th><th>Day 7</th>
         <th>Day 8</th><th>Day 9</th><th>Day 10</th><th>Day 11</th><th>Day 12</th><th>Day 13</th>
+        <th>Progress</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody id="habitBody">
@@ -43,53 +62,11 @@
     localStorage.setItem('habits', JSON.stringify(habits));
   }
 
-  function renderHabits() {
-    habitBody.innerHTML = '';
-    habits.forEach((habit, habitIndex) => {
-      const tr = document.createElement('tr');
-
-      // Habit name cell
-      const nameTd = document.createElement('td');
-      nameTd.textContent = habit.name;
-      nameTd.className = 'habit-name';
-      tr.appendChild(nameTd);
-
-      // For each of the 13 weeks, create a cell
-      for(let i = 0; i < 13; i++) {
-        const td = document.createElement('td');
-        td.className = 'week-cell';
-        if(habit.weeks && habit.weeks[i]) {
-          td.classList.add('done');
-        }
-
-        td.onclick = () => {
-          habit.weeks = habit.weeks || [];
-          habit.weeks[i] = !habit.weeks[i];  // toggle
-          saveHabits();
-          renderHabits();
-        };
-
-        tr.appendChild(td);
-      }
-
-      habitBody.appendChild(tr);
-    });
+  // Calculate % progress for a habit (how many days done / 13)
+  function getProgress(weeks) {
+    if (!weeks) return 0;
+    const doneCount = weeks.filter(Boolean).length;
+    return Math.round((doneCount / 13) * 100);
   }
 
-  function addHabit() {
-    const name = habitInput.value.trim();
-    if(!name) {
-      alert('Please enter a habit');
-      return;
-    }
-    habits.push({ name, weeks: Array(13).fill(false) });
-    saveHabits();
-    renderHabits();
-    habitInput.value = '';
-  }
-
-  // Initial render
-  renderHabits();
-</script>
-</body>
-</html>
+  func

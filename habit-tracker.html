@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Habit Tracker</title>
+  <style>
+    body { font-family: Arial; max-width: 400px; margin: 2rem auto; }
+    input, button { padding: 0.5rem; font-size: 1rem; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 0.5rem 0; cursor: pointer; }
+    .done { text-decoration: line-through; color: gray; }
+  </style>
+</head>
+<body>
+  <h1>Habit Tracker</h1>
+  <input id="habitInput" placeholder="New habit" />
+  <button onclick="addHabit()">Add</button>
+  <ul id="habitList"></ul>
+
+  <script>
+    const habitList = document.getElementById('habitList');
+    const habitInput = document.getElementById('habitInput');
+
+    // Load habits from localStorage or initialize empty array
+    let habits = JSON.parse(localStorage.getItem('habits') || '[]');
+
+    function saveHabits() {
+      localStorage.setItem('habits', JSON.stringify(habits));
+    }
+
+    function renderHabits() {
+      habitList.innerHTML = '';
+      habits.forEach((habit, index) => {
+        const li = document.createElement('li');
+        li.textContent = habit.name;
+        li.className = habit.done ? 'done' : '';
+        li.onclick = () => {
+          habits[index].done = !habits[index].done;
+          saveHabits();
+          renderHabits();
+        };
+        habitList.appendChild(li);
+      });
+    }
+
+    function addHabit() {
+      const name = habitInput.value.trim();
+      if (!name) {
+        alert('Please enter a habit');
+        return;
+      }
+      habits.push({ name, done: false });
+      saveHabits();
+      renderHabits();
+      habitInput.value = '';
+    }
+
+    // Initial render when page loads
+    renderHabits();
+  </script>
+</body>
+</html>

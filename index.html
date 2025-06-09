@@ -1,3 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Habit Tracker for 13 Weeks</title>
+  <style>
+    body { font-family: Segoe UI; max-width: 700px; margin: 2rem auto; }
+    input, button { padding: 0.5rem; font-size: 1rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; text-align: center; padding: 0.5rem; }
+    th { background: #eee; }
+    td.habit-name { text-align: left; cursor: default; }
+    td.week-cell { cursor: pointer; }
+    td.done { background-color: #8fbc8f; } /* green for done */
+    button.delete-btn {
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    #exportBtn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Habit Tracker (13 Weeks)</h1>
+  <input id="habitInput" placeholder="New habit" />
+  <button onclick="addHabit()">Add</button>
+  <button id="exportBtn" onclick="exportData()">Export Data</button>
+
+  <table id="habitTable">
+    <thead>
+      <tr>
+        <th>Habit</th>
+        <!-- Generate week headers -->
+        <th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 5</th><th>Day 6</th><th>Day 7</th>
+        <th>Day 8</th><th>Day 9</th><th>Day 10</th><th>Day 11</th><th>Day 12</th><th>Day 13</th>
+        <th>Progress</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="habitBody">
+      <!-- Rows will go here -->
+    </tbody>
+  </table>
+
 <script>
   const habitInput = document.getElementById('habitInput');
   const habitBody = document.getElementById('habitBody');
@@ -98,3 +151,5 @@
   // Initial render
   renderHabits();
 </script>
+</body>
+</html>

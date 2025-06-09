@@ -1,61 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Habit Tracker</title>
+  <title>Habit Tracker with 13 Weeks</title>
   <style>
-    body { font-family: Arial; max-width: 400px; margin: 2rem auto; }
+    body { font-family: Arial; max-width: 700px; margin: 2rem auto; }
     input, button { padding: 0.5rem; font-size: 1rem; }
-    ul { list-style: none; padding: 0; }
-    li { margin: 0.5rem 0; cursor: pointer; }
-    .done { text-decoration: line-through; color: gray; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; text-align: center; padding: 0.5rem; }
+    th { background: #eee; }
+    td.habit-name { text-align: left; cursor: default; }
+    td.week-cell { cursor: pointer; }
+    td.done { background-color: #8fbc8f; } /* green for done */
   </style>
 </head>
 <body>
-  <h1>Habit Tracker</h1>
+  <h1>Habit Tracker (13 Weeks)</h1>
   <input id="habitInput" placeholder="New habit" />
   <button onclick="addHabit()">Add</button>
-  <ul id="habitList"></ul>
 
-  <script>
-    const habitList = document.getElementById('habitList');
-    const habitInput = document.getElementById('habitInput');
+  <table id="habitTable">
+    <thead>
+      <tr>
+        <th>Habit</th>
+        <!-- Generate week headers -->
+        <th>Wk 1</th><th>Wk 2</th><th>Wk 3</th><th>Wk 4</th><th>Wk 5</th><th>Wk 6</th><th>Wk 7</th>
+        <th>Wk 8</th><th>Wk 9</th><th>Wk 10</th><th>Wk 11</th><th>Wk 12</th><th>Wk 13</th>
+      </tr>
+    </thead>
+    <tbody id="habitBody">
+      <!-- Rows will go here -->
+    </tbody>
+  </table>
 
-    // Load habits from localStorage or initialize empty array
-    let habits = JSON.parse(localStorage.getItem('habits') || '[]');
+<script>
+  const habitInput = document.getElementById('habitInput');
+  const habitBody = document.getElementById('habitBody');
 
-    function saveHabits() {
-      localStorage.setItem('habits', JSON.stringify(habits));
-    }
+  // Load habits or initialize empty
+  let habits = JSON.parse(localStorage.getItem('habits') || '[]');
 
-    function renderHabits() {
-      habitList.innerHTML = '';
-      habits.forEach((habit, index) => {
-        const li = document.createElement('li');
-        li.textContent = habit.name;
-        li.className = habit.done ? 'done' : '';
-        li.onclick = () => {
-          habits[index].done = !habits[index].done;
+  function saveHabits() {
+    localStorage.setItem('habits', JSON.stringify(habits));
+  }
+
+  function renderHabits() {
+    habitBody.innerHTML = '';
+    habits.forEach((habit, habitIndex) => {
+      const tr = document.createElement('tr');
+
+      // Habit name cell
+      const nameTd = document.createElement('td');
+      nameTd.textContent = habit.name;
+      nameTd.className = 'habit-name';
+      tr.appendChild(nameTd);
+
+      // For each of the 13 weeks, create a cell
+      for(let i = 0; i < 13; i++) {
+        const td = document.createElement('td');
+        td.className = 'week-cell';
+        if(habit.weeks && habit.weeks[i]) {
+          td.classList.add('done');
+        }
+
+        td.onclick = () => {
+          habit.weeks = habit.weeks || [];
+          habit.weeks[i] = !habit.weeks[i];  // toggle
           saveHabits();
           renderHabits();
         };
-        habitList.appendChild(li);
-      });
-    }
 
-    function addHabit() {
-      const name = habitInput.value.trim();
-      if (!name) {
-        alert('Please enter a habit');
-        return;
+        tr.appendChild(td);
       }
-      habits.push({ name, done: false });
-      saveHabits();
-      renderHabits();
-      habitInput.value = '';
-    }
 
-    // Initial render when page loads
+      habitBody.appendChild(tr);
+    });
+  }
+
+  function addHabit() {
+    const name = habitInput.value.trim();
+    if(!name) {
+      alert('Please enter a habit');
+      return;
+    }
+    habits.push({ name, weeks: Array(13).fill(false) });
+    saveHabits();
     renderHabits();
-  </script>
+    habitInput.value = '';
+  }
+
+  // Initial render
+  renderHabits();
+</script>
 </body>
 </html>

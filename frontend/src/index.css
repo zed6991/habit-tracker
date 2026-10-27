@@ -286,6 +286,14 @@ h4.sec{
   padding:16px;margin-bottom:12px;
 }
 .card .big{font-size:30px;font-weight:600;letter-spacing:-.026em;line-height:1.1}
+/* Home's quote of the day: the quote in the accent hue so it reads as the page's opening line,
+   the author small and quiet beneath. figure/blockquote carry UA margins, hence the resets. */
+.card.quote{margin-inline:0;border-inline-start:3px solid var(--acc)}
+.quote blockquote{margin:0;font-size:17px;font-weight:600;line-height:1.35;letter-spacing:-.012em;color:var(--label);text-wrap:balance}
+.quote blockquote::before{content:'\201C'}
+.quote blockquote::after{content:'\201D'}
+.quote figcaption{margin-top:8px;font-size:13px;color:var(--label-2)}
+.quote figcaption::before{content:'\2014\00a0'}
 
 /* ------------------------------------------------------ inset group list -- */
 .sect{margin-bottom:22px}
